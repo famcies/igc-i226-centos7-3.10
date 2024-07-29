@@ -113,10 +113,10 @@ void igc_reset(struct igc_adapter *adapter)
 		igc_power_down_phy_copper_base(&adapter->hw);
 
 	/* Re-enable PTP, where applicable. */
-	igc_ptp_reset(adapter);
+	//igc_ptp_reset(adapter);
 
 	/* Re-enable TSN offloading, where applicable. */
-	igc_tsn_offload_apply(adapter);
+	//igc_tsn_offload_apply(adapter);
 
 	igc_get_phy_info(hw);
 }
@@ -643,7 +643,7 @@ static void igc_configure_tx(struct igc_adapter *adapter)
  */
 static void igc_setup_mrqc(struct igc_adapter *adapter)
 {
-	struct igc_hw *hw = &adapter->hw;
+	/*struct igc_hw *hw = &adapter->hw;
 	u32 j, num_rx_queues;
 	u32 mrqc, rxcsum;
 	u32 rss_key[10];
@@ -660,25 +660,25 @@ static void igc_setup_mrqc(struct igc_adapter *adapter)
 			(j * num_rx_queues) / IGC_RETA_SIZE;
 		adapter->rss_indir_tbl_init = num_rx_queues;
 	}
-	igc_write_rss_indir_tbl(adapter);
+	igc_write_rss_indir_tbl(adapter);*/
 
 	/* Disable raw packet checksumming so that RSS hash is placed in
 	 * descriptor on writeback.  No need to enable TCP/UDP/IP checksum
 	 * offloads as they are enabled by default
 	 */
-	rxcsum = rd32(IGC_RXCSUM);
-	rxcsum |= IGC_RXCSUM_PCSD;
+	/*rxcsum = rd32(IGC_RXCSUM);
+	rxcsum |= IGC_RXCSUM_PCSD;*/
 
 	/* Enable Receive Checksum Offload for SCTP */
-	rxcsum |= IGC_RXCSUM_CRCOFL;
+	//rxcsum |= IGC_RXCSUM_CRCOFL;
 
 	/* Don't need to set TUOFL or IPOFL, they default to 1 */
-	wr32(IGC_RXCSUM, rxcsum);
+	//wr32(IGC_RXCSUM, rxcsum);
 
 	/* Generate RSS hash based on packet types, TCP/UDP
 	 * port numbers and/or IPv4/v6 src and dst addresses
 	 */
-	mrqc = IGC_MRQC_RSS_FIELD_IPV4 |
+	/*mrqc = IGC_MRQC_RSS_FIELD_IPV4 |
 	       IGC_MRQC_RSS_FIELD_IPV4_TCP |
 	       IGC_MRQC_RSS_FIELD_IPV6 |
 	       IGC_MRQC_RSS_FIELD_IPV6_TCP |
@@ -691,7 +691,7 @@ static void igc_setup_mrqc(struct igc_adapter *adapter)
 
 	mrqc |= IGC_MRQC_ENABLE_RSS_MQ;
 
-	wr32(IGC_MRQC, mrqc);
+	wr32(IGC_MRQC, mrqc);*/
 }
 
 /**
@@ -1598,7 +1598,7 @@ static struct sk_buff *igc_construct_skb(struct igc_ring *rx_ring,
 		return NULL;
 
 	if (unlikely(igc_test_staterr(rx_desc, IGC_RXDADV_STAT_TSIP))) {
-		igc_ptp_rx_pktstamp(rx_ring->q_vector, va, skb);
+		//igc_ptp_rx_pktstamp(rx_ring->q_vector, va, skb);
 		va += IGC_TS_HDR_LEN;
 		size -= IGC_TS_HDR_LEN;
 	}
@@ -3771,7 +3771,7 @@ void igc_down(struct igc_adapter *adapter)
 
 	set_bit(__IGC_DOWN, &adapter->state);
 
-	igc_ptp_suspend(adapter);
+	//igc_ptp_suspend(adapter);
 
 	/* disable receives in the hardware */
 	rctl = rd32(IGC_RCTL);
@@ -3847,8 +3847,8 @@ static void igc_reset_task(struct work_struct *work)
 		return;
 	}
 
-	igc_rings_dump(adapter);
-	igc_regs_dump(adapter);
+	//igc_rings_dump(adapter);
+	//igc_regs_dump(adapter);
 	netdev_err(adapter->netdev, "Reset adapter\n");
 	igc_reinit_locked(adapter);
 	rtnl_unlock();
@@ -4123,10 +4123,11 @@ static void igc_clear_interrupt_scheme(struct igc_adapter *adapter)
 /* Need to wait a few seconds after link up to get diagnostic information from
  * the phy
  */
-static void igc_update_phy_info(struct timer_list *t)
+//static void igc_update_phy_info(struct timer_list *t)
+static void igc_update_phy_info(unsigned long data)
 {
-	struct igc_adapter *adapter = from_timer(adapter, t, phy_info_timer);
-
+	//struct igc_adapter *adapter = from_timer(adapter, t, phy_info_timer);
+        struct igc_adapter *adapter = (struct igc_adapter *)data;
 	igc_get_phy_info(&adapter->hw);
 }
 
@@ -4165,9 +4166,11 @@ bool igc_has_link(struct igc_adapter *adapter)
  * igc_watchdog - Timer Call-back
  * @t: timer for the watchdog
  */
-static void igc_watchdog(struct timer_list *t)
+//static void igc_watchdog(struct timer_list *t)
+static void igc_watchdog(unsigned long data)
 {
-	struct igc_adapter *adapter = from_timer(adapter, t, watchdog_timer);
+	//struct igc_adapter *adapter = from_timer(adapter, t, watchdog_timer);
+	struct igc_adapter *adapter = (struct igc_adapter *)data;
 	/* Do the rest outside of interrupt context */
 	schedule_work(&adapter->watchdog_task);
 }
@@ -4341,7 +4344,7 @@ no_wait:
 		wr32(IGC_ICS, IGC_ICS_RXDMT0);
 	}
 
-	igc_ptp_tx_hang(adapter);
+	//igc_ptp_tx_hang(adapter);
 
 	/* Reset the timer */
 	if (!test_bit(__IGC_DOWN, &adapter->state)) {
@@ -4660,9 +4663,11 @@ static int igc_ioctl(struct net_device *netdev, struct ifreq *ifr, int cmd)
 {
 	switch (cmd) {
 	case SIOCGHWTSTAMP:
-		return igc_ptp_get_ts_config(netdev, ifr);
+		//return igc_ptp_get_ts_config(netdev, ifr);
+		return 0;
 	case SIOCSHWTSTAMP:
-		return igc_ptp_set_ts_config(netdev, ifr);
+		//return igc_ptp_set_ts_config(netdev, ifr);
+		return 0;
 	default:
 		return -EOPNOTSUPP;
 	}
@@ -5047,7 +5052,7 @@ static int igc_probe(struct pci_dev *pdev,
 	hw->hw_addr = adapter->io_addr;
 
 	netdev->netdev_ops = &igc_netdev_ops;
-	igc_ethtool_set_ops(netdev);
+	//igc_ethtool_set_ops(netdev);
 	netdev->watchdog_timeo = 5 * HZ;
 
 	netdev->mem_start = pci_resource_start(pdev, 0);
@@ -5124,8 +5129,10 @@ static int igc_probe(struct pci_dev *pdev,
 	wr32(IGC_RXPBS, I225_RXPBSIZE_DEFAULT);
 	wr32(IGC_TXPBS, I225_TXPBSIZE_DEFAULT);
 
-	timer_setup(&adapter->watchdog_timer, igc_watchdog, 0);
-	timer_setup(&adapter->phy_info_timer, igc_update_phy_info, 0);
+	//timer_setup(&adapter->watchdog_timer, igc_watchdog, 0);
+	//timer_setup(&adapter->phy_info_timer, igc_update_phy_info, 0);
+	setup_timer(&adapter->watchdog_timer, igc_watchdog, (unsigned long)adapter);
+	setup_timer(&adapter->phy_info_timer, igc_update_phy_info, (unsigned long)adapter);
 
 	INIT_WORK(&adapter->reset_task, igc_reset_task);
 	INIT_WORK(&adapter->watchdog_task, igc_watchdog_task);
@@ -5148,7 +5155,7 @@ static int igc_probe(struct pci_dev *pdev,
 	device_set_wakeup_enable(&adapter->pdev->dev,
 				 adapter->flags & IGC_FLAG_WOL_SUPPORTED);
 
-	igc_ptp_init(adapter);
+	//igc_ptp_init(adapter);
 
 	/* reset the hardware with the new settings */
 	igc_reset(adapter);
@@ -5222,7 +5229,7 @@ static void igc_remove(struct pci_dev *pdev)
 
 	igc_flush_nfc_rules(adapter);
 
-	igc_ptp_stop(adapter);
+	//igc_ptp_stop(adapter);
 
 	set_bit(__IGC_DOWN, &adapter->state);
 
@@ -5240,8 +5247,8 @@ static void igc_remove(struct pci_dev *pdev)
 
 	igc_clear_interrupt_scheme(adapter);
 	pci_iounmap(pdev, adapter->io_addr);
-	pci_release_mem_regions(pdev);
-
+	//pci_release_mem_regions(pdev);
+        pci_release_selected_regions(pdev,pci_select_bars(pdev, IORESOURCE_MEM));
 	free_netdev(netdev);
 
 	pci_disable_pcie_error_reporting(pdev);
@@ -5265,7 +5272,7 @@ static int __igc_shutdown(struct pci_dev *pdev, bool *enable_wake,
 	if (netif_running(netdev))
 		__igc_close(netdev, true);
 
-	igc_ptp_suspend(adapter);
+	//igc_ptp_suspend(adapter);
 
 	igc_clear_interrupt_scheme(adapter);
 	rtnl_unlock();

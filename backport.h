@@ -202,11 +202,11 @@ static inline bool ethtool_convert_link_mode_to_legacy_u32(u32 *legacy_u32,
         return retval;
 }
 
-static inline int page_ref_sub_and_test(struct page *page, int nr)
+/*static inline int page_ref_sub_and_test(struct page *page, int nr)
 {
 	int ret = atomic_sub_and_test(nr, &page->_count);
 	return ret;
-}
+}*/
 
 static inline void __page_frag_cache_drain(struct page *page, unsigned int count)
 {
