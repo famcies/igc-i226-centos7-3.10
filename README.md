@@ -1,5 +1,6 @@
 how to compile：
 yum install kernel-devel-xx kernel-headers-xx
+
 cd igc
 make -C /lib/modules/`uname -r`/build M=$PWD modules
 
