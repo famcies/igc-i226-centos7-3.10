@@ -3779,8 +3779,8 @@ void igc_down(struct igc_adapter *adapter)
 	/* flush and sleep below */
 
 	/* set trans_start so we don't get spurious watchdogs during reset */
-	netdev->trans_start = jiffies;
-
+	//netdev->trans_start = jiffies;
+        netif_trans_update(netdev);
 	netif_carrier_off(netdev);
 	netif_tx_stop_all_queues(netdev);
 
@@ -4852,7 +4852,7 @@ static const struct net_device_ops igc_netdev_ops = {
 	.ndo_start_xmit		= igc_xmit_frame,
 	.ndo_set_rx_mode	= igc_set_rx_mode,
 	.ndo_set_mac_address	= igc_set_mac,
-	.ndo_change_mtu		= igc_change_mtu,
+	.ndo_change_mtu_rh74	= igc_change_mtu,
 	.ndo_get_stats64	= igc_get_stats64,
 	.ndo_fix_features	= igc_fix_features,
 	.ndo_set_features	= igc_set_features,
