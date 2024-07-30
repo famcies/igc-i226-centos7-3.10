@@ -12,3 +12,8 @@ how to install：
  depmod 
  
  modprobe igc
+
+
+known issues：
+
+Cannot use ethtool to config card，only support auto negotiation 100M/1000M/2500M
