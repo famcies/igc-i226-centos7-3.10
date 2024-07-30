@@ -1,5 +1,5 @@
 how to compile：
-yum install kernel-devel-xx kernel-headers-xx
+yum install kernel-devel-3.10.0-514.el7.x86_64.rpm kernel-headers-3.10.0-514.el7.x86_64.rpm
 
 cd igc
 
