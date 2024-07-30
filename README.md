@@ -3,7 +3,7 @@ yum install kernel-devel-3.10.0-514.el7.x86_64.rpm kernel-headers-3.10.0-514.el7
 
 cd igc
 
-make -C /lib/modules/`uname -r`/build M=$PWD modules
+make -C /lib/modules/ `uname -r` /build M=$PWD modules
 
 how to install：
 
