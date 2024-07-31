@@ -9,6 +9,14 @@ how to install：
 
  cp igc.ko /usr/lib/modules/3.10.0-xxx.el7.x86_64/kernel/drivers/net/ethernet/.
  
+ (centos7.9:
+ 
+ cp igc.ko /usr/lib/modules/3.10.0-1160.el7.x86_64/kernel/drivers/net/ethernet/intel/igc/.
+
+  rm igc.ko.xz
+
+  xz -9 igc.ko)
+ 
  depmod 
  
  modprobe igc
